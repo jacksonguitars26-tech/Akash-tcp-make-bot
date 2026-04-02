@@ -10062,4 +10062,36 @@ async def MaiiiinE():
 if __name__ == '__main__':
     asyncio.run(StarTinG())
     
-  
+
+# ============ RENDER COMPATIBILITY ============
+if __name__ == "__main__":
+    import os
+    from flask import Flask
+    import threading
+    import asyncio
+    
+    flask_app = Flask(__name__)
+    
+    @flask_app.route('/')
+    def home():
+        return "Bot is running!"
+    
+    @flask_app.route('/health')
+    def health():
+        return {"status": "ok"}, 200
+    
+    def run_server():
+        port = int(os.environ.get("PORT", 10000))
+        flask_app.run(host='0.0.0.0', port=port, threaded=True)
+    
+    # Flask server start
+    server_thread = threading.Thread(target=run_server, daemon=True)
+    server_thread.start()
+    print(f"Server started on port {os.environ.get('PORT', 10000)}")
+    
+    # Bot start
+    try:
+        asyncio.run(StarTinG())
+    except Exception as e:
+        print(f"Error: {e}")
+		
